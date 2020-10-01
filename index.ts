@@ -1,11 +1,10 @@
-import * as aws from "aws-sdk";
-import { ServerlessInstance } from "./ServerlessInstance";
-import { ServerlessOptions } from "./ServerlessOptions";
+import * as aws from 'aws-sdk';
+import { ServerlessInstance } from './ServerlessInstance';
+import { ServerlessOptions } from './ServerlessOptions';
 
 interface IHooks {
-  "aws:package:finalize:mergeCustomProviderResources": () => void;
+  'aws:package:finalize:mergeCustomProviderResources': () => void;
 }
-
 
 class ServerlessVPCPeeringOptions {
   private serverless: ServerlessInstance;
@@ -20,58 +19,59 @@ class ServerlessVPCPeeringOptions {
     this.options = options;
 
     this.hooks = {
-      "aws:package:finalize:mergeCustomProviderResources": this.setOptions.bind(
-        this,
-      ),
+      'aws:package:finalize:mergeCustomProviderResources': this.setOptions.bind(this)
     };
   }
 
   private async setOptions() {
     const enabled = this.evaluateEnabled(this.serverless.service.custom.vpcPeerOptions.enabled);
     if (!enabled) {
-      this.serverless.cli.log("Skipping serverless-vpc-peering-options as not enabled");
+      this.serverless.cli.log('Skipping serverless-vpc-peering-options as not enabled');
       return;
     }
 
-    let params = {
-      VpcPeeringConnectionId: this.serverless.service.custom.vpcPeerOptions.peer, 
+    const params = {
+      VpcPeeringConnectionId: this.serverless.service.custom.vpcPeerOptions.peer,
       AccepterPeeringConnectionOptions: {
-        AllowDnsResolutionFromRemoteVpc: this.serverless.service.custom.vpcPeerOptions.accepterAllowDnsResolutionFromRemoteVpc || false,
-        AllowEgressFromLocalClassicLinkToRemoteVpc: this.serverless.service.custom.vpcPeerOptions.accepterAllowEgressFromLocalClassicLinkToRemoteVpc || false,
-        AllowEgressFromLocalVpcToRemoteClassicLink: this.serverless.service.custom.vpcPeerOptions.accepterAllowEgressFromLocalVpcToRemoteClassicLink || false
+        AllowDnsResolutionFromRemoteVpc:
+          this.serverless.service.custom.vpcPeerOptions.accepterAllowDnsResolutionFromRemoteVpc || false,
+        AllowEgressFromLocalClassicLinkToRemoteVpc:
+          this.serverless.service.custom.vpcPeerOptions.accepterAllowEgressFromLocalClassicLinkToRemoteVpc || false,
+        AllowEgressFromLocalVpcToRemoteClassicLink:
+          this.serverless.service.custom.vpcPeerOptions.accepterAllowEgressFromLocalVpcToRemoteClassicLink || false
       },
       DryRun: true || false,
       RequesterPeeringConnectionOptions: {
-        AllowDnsResolutionFromRemoteVpc: this.serverless.service.custom.vpcPeerOptions.requesterAllowDnsResolutionFromRemoteVpc || false,
-        AllowEgressFromLocalClassicLinkToRemoteVpc: this.serverless.service.custom.vpcPeerOptions.requesterAllowEgressFromLocalClassicLinkToRemoteVpc || false,
-        AllowEgressFromLocalVpcToRemoteClassicLink: this.serverless.service.custom.vpcPeerOptions.requesterAllowEgressFromLocalVpcToRemoteClassicLink || false
+        AllowDnsResolutionFromRemoteVpc:
+          this.serverless.service.custom.vpcPeerOptions.requesterAllowDnsResolutionFromRemoteVpc || false,
+        AllowEgressFromLocalClassicLinkToRemoteVpc:
+          this.serverless.service.custom.vpcPeerOptions.requesterAllowEgressFromLocalClassicLinkToRemoteVpc || false,
+        AllowEgressFromLocalVpcToRemoteClassicLink:
+          this.serverless.service.custom.vpcPeerOptions.requesterAllowEgressFromLocalVpcToRemoteClassicLink || false
       }
     };
 
-    this.ec2.modifyVpcPeeringConnectionOptions(params, function(err, data){
-      if (err) 
-      {
+    this.ec2.modifyVpcPeeringConnectionOptions(params, function (err, data) {
+      if (err) {
         throw new Error(err.message);
-      }
-      else
-      {
-        this.serverless.cli.log("VPC peering options successfully modified");           // successful response
+      } else {
+        this.serverless.cli.log('VPC peering options successfully modified');
       }
     });
   }
 
   private evaluateEnabled(enabled?: string | boolean) {
     if (enabled === undefined) {
-        return true;
+      return true;
     }
-    if (typeof enabled === "boolean") {
-        return enabled;
-    } else if (typeof enabled === "string" && enabled === "true") {
-        return true;
-    } else if (typeof enabled === "string" && enabled === "false") {
-        return false;
+    if (typeof enabled === 'boolean') {
+      return enabled;
+    } else if (typeof enabled === 'string' && enabled === 'true') {
+      return true;
+    } else if (typeof enabled === 'string' && enabled === 'false') {
+      return false;
     }
-    throw new Error(`serverless-vpc-peering-options: Ambiguous enablement boolean: "${enabled}"`);
+    throw new Error(`serverless-vpc-peering-options: Ambiguous enablement boolean: '${enabled}'`);
   }
 }
 
