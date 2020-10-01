@@ -1,0 +1,46 @@
+  
+{
+    "name": "serverless-vpc-peering-options",
+    "version": "0.0.1",
+    "description": "Plugin to set VPC peering options after deployment that are unavailable via Cloudformation",
+    "main": "dist/index.js",
+    "dependencies": {
+      "aws-sdk": "^2.407.0"
+    },
+    "keywords": [
+      "typescript",
+      "serverless",
+      "vpc",
+      "serverless-framework",
+      "peering"
+    ],
+    "devDependencies": {
+      "@types/node": "^11.9.4",
+      "prettier": "^2.0.5",
+      "ts-node": "^8.0.2",
+      "tslint": "^5.12.1",
+      "tslint-microsoft-contrib": "^6.1.0-beta",
+      "typescript": "^3.3.3",
+      "husky": "^4.3.0"
+    },
+    "scripts": {
+      "lint": "tslint --project .",
+      "build": "tsc --project ."
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/KristanMcDonald/serverless-vpc-peering-options.git"
+    },
+    "author": "Kristan McDonald",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/KristanMcDonald/serverless-vpc-peering-options/issues"
+    },
+    "homepage": "https://github.com/KristanMcDonald/serverless-vpc-peering-options#readme"
+    ,
+    "husky": {
+      "hooks": {
+        "pre-commit": "pretty-quick --staged --pattern '**/*.{ts,tsx,js,jsx}' && yarn tsc:check --since HEAD && yarn tslint:check --since HEAD"
+      }
+    }
+  }
