@@ -1,6 +1,6 @@
 {
   "name": "serverless-vpc-peering-options",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Plugin to set VPC peering options after deployment that are unavailable via Cloudformation",
   "main": "dist/index.js",
   "dependencies": {

@@ -2,6 +2,7 @@
 Plugin to set VPC peering options after deployment that are unavailable via Cloudformation
 
 [![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
+[![npm version](https://badge.fury.io/js/serverless-vpc-peering-options.svg)](https://badge.fury.io/js/serverless-vpc-peering-options)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/KristanMcDonald/serverless-vpc-peering-options/master/LICENSE)
 
 ## Why
